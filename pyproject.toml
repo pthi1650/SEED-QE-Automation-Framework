@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "seed-qe-automation-framework"
+version = "0.1.0"
+description = "POC for SEED FY24_Q4 data testing tool"
+authors = ["pthi1650 <156160259+pthi1650@users.noreply.github.com>"]
+package-mode = false  # Add this line to disable package mode
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+polars = "^0.20.31"
+pyspark = "^3.5.1"
+pytest = "^8.2.2"
+toml = "^0.10.2"
+pyyaml = "^6.0.1"
+boto3 = "^1.34.128"
+hvac = "^2.2.0"
+
+
+[tool.poetry.group.dev.dependencies]
+coverage = "^7.5.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

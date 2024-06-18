@@ -1,0 +1,15 @@
+[team_commons]
+database_port = "5378"
+database_name = "seedpro"
+
+[dev]
+database_host = "dev-db.host"
+database_password = "dev_secret"
+
+[stg]
+database_host = "stg-db.host"
+database_password = "stg_secret"
+
+[prod]
+database_host = "prod-db.host"
+database_password = "prod_secret"

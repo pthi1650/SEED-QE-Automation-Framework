@@ -1,0 +1,9 @@
+{
+  "database": {
+    "host": "localhost",
+    "port": 5432,
+    "user": "dev_admin",
+    "password": "dev_secret"
+  },
+  "feature_flag": true
+}

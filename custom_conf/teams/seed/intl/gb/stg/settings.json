@@ -1,0 +1,9 @@
+{
+  "database": {
+    "host": "stg-db.example.com",
+    "port": 5432,
+    "user": "stg_admin",
+    "password": "stg_secret"
+  },
+  "feature_flag": false
+}
