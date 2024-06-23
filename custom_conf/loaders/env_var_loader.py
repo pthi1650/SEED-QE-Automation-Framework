@@ -15,4 +15,4 @@ class EnvVarLoader:
         Returns:
             Dict[str, str]: A dictionary of settings loaded from environment variables.
         """
-        return {key: value for key, value in os.environ.items() if key.startswith('CONF_')}
+        return {key: value for key, value in os.environ.items() if key.startswith('SEED_CONF_')}

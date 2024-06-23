@@ -127,3 +127,7 @@ deployment.yaml
 
 # Ignore all .secrets.toml files
 *.secrets.toml
+
+# Ignore auto log folder and files
+
+./logs

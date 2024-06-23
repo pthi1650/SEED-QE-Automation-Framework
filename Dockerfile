@@ -1,10 +1,10 @@
-# For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:3.12-slim
+# Use official Python image as a base
+FROM python:3.12.4-slim
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# Turns off buffering for easier container logging
+# Turns off buffering for easier container logs
 ENV PYTHONUNBUFFERED=1
 
 # Set the working directory
@@ -13,18 +13,26 @@ WORKDIR /app
 # Create a non-root user and group
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 
-# Copy the project files to the working directory
-COPY . /app
-
 # Change ownership of the working directory
 RUN chown -R appuser:appuser /app
 
 # Switch to the non-root user
 USER appuser
 
-# Install dependencies
-COPY pyproject.toml poetry.lock /app/
-RUN pip install poetry && poetry install --no-root
+# Copy dependencies file
+COPY pyproject.toml poetry.lock ./
 
-# Set the entry point to keep the container running
-CMD ["poetry", "run", "bash"]
+# Install Poetry
+RUN pip install poetry
+
+# Install dependencies
+RUN poetry install --no-dev
+
+# Copy the project files
+COPY . .
+
+# Expose the application port
+EXPOSE 7990
+
+# Run the application
+CMD ["poetry", "run", "pytest", "tests/test_generic_seed_data_workflow.py"]

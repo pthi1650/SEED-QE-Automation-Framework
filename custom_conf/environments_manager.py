@@ -1,8 +1,9 @@
 import toml
-from pathlib import Path
 from typing import Any
 from custom_conf.config_sources import LocalSource
-from utils.commons.path_util import construct_path  # Updated import path
+from utils.commons.path_util import construct_path
+from utils.framework import path_util
+
 
 class EnvironmentsManager:
     """
@@ -32,14 +33,17 @@ class EnvironmentsManager:
         Raises:
             FileNotFoundError: If the settings file for the specified team and environment does not exist.
         """
-        base_path = construct_path('C:/Repos/QA/SEED-QE-Automation-Framework/custom_conf/teams', team, environment, 'settings.json')
-        if not base_path.exists():
+        team_dir_path = path_util.get_team_folder_path()
+        settings_file_path = construct_path(team_dir_path, team, 'settings.toml')
+
+        if not settings_file_path.exists():
             raise FileNotFoundError(f"Settings file not found for team: {team}, environment: {environment}")
 
-        local_source = LocalSource(base_path)
+        local_source = LocalSource(settings_file_path)
         self.conf_manager.load(local_source)
 
-        secrets_path = construct_path('C:/Repos/QA/SEED-QE-Automation-Framework/custom_conf/teams', team, '.secrets.toml')
+        secrets_path = construct_path(team_dir_path, team, '.secrets.toml')
+
         if secrets_path.exists():
             with open(secrets_path, 'r') as file:
                 secrets = toml.load(file)

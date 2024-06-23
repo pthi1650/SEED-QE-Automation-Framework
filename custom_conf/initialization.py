@@ -1,17 +1,25 @@
+import logging
 from pathlib import Path
 import toml
-from typing import Any, Optional
+from typing import Optional
 
+from utils.framework import path_util
 from .conf_manager import ConfManager
 from .environments_manager import EnvironmentsManager
 from .loaders.env_var_loader import EnvVarLoader
 from .loaders.remote_loader import RemoteLoader
 from .config_sources.remote_source import RemoteSource
-from utils.framework.config_util import load_layered_settings, get_team_folder_path
+from utils.framework.config_util import load_layered_settings
 
 
-def initialize_config(team_key: str, environment: str, detect_env_vars: bool = False,
-                      remote_config_src_type: Optional[str] = None, allow_remote_update: bool = False) -> ConfManager:
+LOGGER = logging.getLogger(__name__)
+
+
+def initialize_config(
+        team_key: str, environment: str,
+        detect_env_vars: bool = False,
+        remote_config_src_type: Optional[str] = None,
+        allow_remote_update: bool = False) -> ConfManager:
     """
     Initialize the configuration manager with local, environment, and remote settings.
 
@@ -29,11 +37,11 @@ def initialize_config(team_key: str, environment: str, detect_env_vars: bool = F
     env_manager = EnvironmentsManager(conf_manager)
 
     # Get team folder path and relative path for secrets
-    base_path = Path('C:/Repos/QA/SEED-QE-Automation-Framework/custom_conf/teams')
-    team_path, relative_team_path = get_team_folder_path(base_path, team_key)
+    team_dir_path = path_util.get_team_folder_path()
+    team_path, relative_team_path = path_util.get_team_folder_path_with_key(team_dir_path, team_key)
 
-    print(f"Team path: {team_path}")
-    print(f"Relative team path: {relative_team_path}")
+    LOGGER.info(f"Team path: {team_path}")
+    LOGGER.info(f"Relative team path: {relative_team_path}")
 
     # Load local configuration
     load_local_config(env_manager, team_path, environment)
@@ -44,7 +52,7 @@ def initialize_config(team_key: str, environment: str, detect_env_vars: bool = F
 
     # Optionally load remote secrets
     if remote_config_src_type:
-        load_remote_secrets(conf_manager, base_path, relative_team_path, environment, remote_config_src_type,
+        load_remote_secrets(conf_manager, team_dir_path, relative_team_path, environment, remote_config_src_type,
                             allow_remote_update)
 
     return conf_manager
@@ -97,7 +105,7 @@ def load_remote_secrets(conf_manager: ConfManager, base_path: Path, relative_tea
         'vault_token': 'root',
         'env_secret_path': f'{relative_team_path}/{environment}/secrets'
     }
-    print(f"Using environment secret path: {remote_params['env_secret_path']}")
+    LOGGER.info(f"Using environment secret path: {remote_params['env_secret_path']}")
     remote_source = RemoteSource(remote_config_src_type, remote_params)
     remote_source.read_and_store_secrets(secrets_file, allow_remote_update, environment)
 

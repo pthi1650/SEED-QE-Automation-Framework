@@ -1,6 +1,7 @@
 from typing import Any, Dict, Optional
 from threading import Lock
 
+
 class ConfManager:
     """
     Configuration Manager class to manage application settings.

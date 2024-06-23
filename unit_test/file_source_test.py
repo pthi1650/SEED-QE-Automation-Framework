@@ -10,7 +10,7 @@ class TestLocalSource(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.sandbox = Path(__file__).parent / 'sandbox/unittesting'
+        cls.sandbox = Path(__file__).parent / 'scratch_unittest_folder/unittesting'
         cls.sandbox.mkdir(parents=True, exist_ok=True)
 
     @classmethod

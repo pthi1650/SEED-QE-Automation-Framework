@@ -23,7 +23,7 @@ def file_exists(file_path: Union[str, Path]) -> bool:
     return path.exists()
 
 
-def load_toml(file_path: Union[str, Path]) -> Dict[str, Any]:
+def load_toml_file(file_path: Union[str, Path]) -> Dict[str, Any]:
     """
     Load the TOML data from the file.
 
