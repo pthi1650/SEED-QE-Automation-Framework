@@ -101,8 +101,8 @@ def load_remote_secrets(conf_manager: ConfManager, base_path: Path, relative_tea
     """
     secrets_file = base_path / relative_team_path / '.secrets.toml'
     remote_params = {
-        'vault_url': 'http://127.0.0.1:8200',
-        'vault_token': 'root',
+        'vault_url': conf_manager.settings.get('SEED_CONF_VAULT_HOST_IP'),
+        'vault_token': conf_manager.settings.get('SEED_CONF_VAULT_KEY'),
         'env_secret_path': f'{relative_team_path}/{environment}/secrets'
     }
     LOGGER.info(f"Using environment secret path: {remote_params['env_secret_path']}")

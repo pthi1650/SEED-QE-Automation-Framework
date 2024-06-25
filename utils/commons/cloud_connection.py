@@ -17,14 +17,9 @@ def get_s3_client(config: Dict[str, Any]):
         boto3.client: S3 client object.
     """
     try:
-
         s3_client = boto3.client(
-            's3',
-            aws_access_key_id=config['s3_aws_key'],
-            aws_secret_access_key=config['s3_aws_secret'],
-            aws_session_token=config['s3_aws_token'],
-            region_name='eu-west-1'
-           )
+            's3'
+        )
         LOGGER.debug("S3 client created successfully.")
         return s3_client
     except (NoCredentialsError, PartialCredentialsError) as e:

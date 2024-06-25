@@ -5,7 +5,7 @@
             "environments": [
                 "stg"
             ],
-            "detect_env_vars": false,
+            "detect_env_vars": true,
             "remote_config_src_type": "vault",
             "allow_remote_update": true
         }
