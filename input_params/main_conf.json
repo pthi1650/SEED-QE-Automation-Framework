@@ -7,7 +7,8 @@
             ],
             "detect_env_vars": true,
             "remote_config_src_type": "vault",
-            "allow_remote_update": true
+            "allow_remote_update": true,
+            "table_names": ["out_trff_lght_mstr_rdx_gb_fact"]
         }
     ]
 }

@@ -1,0 +1,32 @@
+source:
+  sftp:
+    source_type: "sftp"
+    source_folder_path: "PGM/FRA/Hierarchy - ID mapping/"
+    source_file_type: "csv"
+
+stage:
+  aws_s3:
+    stg_s3_bucket: "sysco-seed-eu-np-external-inbound"
+    stg_s3_path: "PGM/GB/DirectUpload/GB_BS_Lots_and_lights_redux/"
+    stage_compression: "gzip"
+    stage_encryption: "AES256"
+    data_format: "csv"
+    column_map: ["catgy_hier1_nm", "catgy_hier2_nm", "catgy_hier3_nm", "sku_cd", "sku_nm", "lot_nm", "pck_sz_cd", "wgt_qty", "wgt_unit_cd", "list_prc_ext_amt", "list_prc_or_wgt_amt", "liv_trff_lght_desc"]
+
+
+warehouse:
+  redshift:
+    lndp:
+      table_name: "lndp_table"
+      schema_name: "lndp_schema"
+      load_strategy: "incremental"
+    intp:
+      table_name: "intp_table"
+      schema_name: "intp_schema"
+      transformation_logic: "apply_scd"
+      data_quality_checks: ["check_nulls", "check_duplicates"]
+    edwp:
+      table_name: "edwp_table"
+      schema_name: "edwp_schema"
+      load_strategy: "incremental"
+      data_quality_checks: ["check_nulls", "check_duplicates"]

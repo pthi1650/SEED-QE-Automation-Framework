@@ -1,0 +1,33 @@
+source:
+  sftp:
+    source_type: "sftp"
+    source_folder_path: "PGM/FRA/out_trff_lght_mstr_rdx_gb_fact/"
+    source_file_type: "csv"
+
+stage:
+  aws_s3:
+    stg_s3_bucket: "sysco-seed-eu-np-external-inbound"
+    stg_s3_path: "PGM/GB/DirectUpload/GB_BS_Customer_Specific_PGM_Output/"
+    stage_compression: "gzip"
+    stage_encryption: "AES256"
+    data_format: "csv"
+    delimiter: "|"
+    column_map: ["urn_nbr", "urn_nm", "os_cd", "os_nm", "os_pck_sz_desc", "os_sale_prc_amt", "as_cd", "as_nm", "as_pck_sz_desc", "as_sell_price_amt", "wk_qty", "wk_sale_bfr_swap_amt", "wk_mrgn_bfr_swap_amt", "wk_cust_bnft_amt", "wk_sysco_bnft_amt", "fnl_rnk_nbr", "allergen_mtch_ind_cd", "awrd_win_prod_ind_cd", "dir_sbst_ind_cd", "os_trff_lght_desc", "as_trff_lght_desc", "as_eq_vol_pr_wk_qty", "os_tmp_desc", "as_tmp_desc", "mrgn_ptntl_annualised_amt", "sale_rep_fs_desc", "sale_mgr_fs_desc", "sugg_dscnt_desc"]
+
+
+warehouse:
+  redshift:
+    lndp:
+      table_name: "lndp_table"
+      schema_name: "lndp_schema"
+      load_strategy: "incremental"
+    intp:
+      table_name: "intp_table"
+      schema_name: "intp_schema"
+      transformation_logic: "apply_scd"
+      data_quality_checks: ["check_nulls", "check_duplicates"]
+    edwp:
+      table_name: "edwp_table"
+      schema_name: "edwp_schema"
+      load_strategy: "incremental"
+      data_quality_checks: ["check_nulls", "check_duplicates"]

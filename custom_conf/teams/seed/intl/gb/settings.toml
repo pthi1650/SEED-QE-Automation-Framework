@@ -1,5 +1,4 @@
 [team_commons]
-etl_db_engine = "redshift"
 database_port = "5378"
 database_name = "seedpro"
 
@@ -10,8 +9,6 @@ database_password = "dev_secret"
 [stg]
 database_host = "stg-db.host"
 database_password = "stg_secret"
-s3_bucket = "sysco-seed-eu-np-external-inbound"
-s3_path = "PGM/FRA/Hierarchy - ID mapping/"
 
 [prod]
 database_host = "prod-db.host"

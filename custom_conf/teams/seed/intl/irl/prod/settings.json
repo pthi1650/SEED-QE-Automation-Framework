@@ -1,9 +1,0 @@
-{
-  "database": {
-    "host": "prod-db.example.com",
-    "port": 5432,
-    "user": "prod_admin",
-    "password": "prod_secret"
-  },
-  "feature_flag": false
-}

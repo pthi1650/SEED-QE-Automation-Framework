@@ -99,3 +99,14 @@ def get_settings_file_path(team_path: Path, environment: str) -> Path:
         Path: Path to the team's settings file.
     """
     return team_path / environment / 'settings.toml'
+
+
+def get_input_params_path() -> Path:
+    """
+    Get the path to the input_params folder in the project.
+
+    Returns:
+        Path: The path to the input_params folder.
+    """
+    project_root = get_project_root_path()
+    return project_root / 'input_params'

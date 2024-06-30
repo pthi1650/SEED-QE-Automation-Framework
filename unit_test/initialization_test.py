@@ -37,10 +37,10 @@ class TestInitialization(unittest.TestCase):
         load_local_config(self.env_manager, dummy_file.parent, 'dev')
         self.assertEqual(self.conf_manager.get('key1'), 'value1')
 
-    @patch.dict('os.environ', {'CONF_KEY2': 'value2'})
+    @patch.dict('os.environ', {'SEED_CONF_KEY2': 'value2'})
     def test_load_env_vars(self):
         load_env_vars(self.conf_manager)
-        self.assertEqual(self.conf_manager.get('CONF_KEY2'), 'value2')
+        self.assertEqual(self.conf_manager.get('SEED_CONF_KEY2'), 'value2')
 
     @patch('custom_conf.initialization.RemoteSource.load', return_value={'key3': 'value3'})
     def test_load_remote_secrets(self, mock_load):
