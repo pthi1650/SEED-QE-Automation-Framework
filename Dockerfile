@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
     sudo \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-# Install Vault
+# Install Vault - Hashi ins
 RUN wget https://releases.hashicorp.com/vault/1.10.3/vault_1.10.3_linux_amd64.zip \
     && unzip vault_1.10.3_linux_amd64.zip \
     && mv vault /usr/local/bin/ \

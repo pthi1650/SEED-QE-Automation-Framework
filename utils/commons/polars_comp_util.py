@@ -64,8 +64,6 @@ def compare_dataframes(df1: pl.DataFrame, df2: pl.DataFrame, df1_name: str = "df
         return False, f"Error while comparing dataframes: {error}", pl.DataFrame()
 
 
-
-
 def generate_html_report(mismatched_df: pl.DataFrame, file_name: str) -> None:
     """
     Generate an HTML report for the mismatched rows.
@@ -84,8 +82,6 @@ def generate_html_report(mismatched_df: pl.DataFrame, file_name: str) -> None:
     except Exception as e:
         LOGGER.error(f"Error generating HTML report: {e}")
         raise
-
-
 
 
 def get_union_dataset(df1: pl.DataFrame, df2: pl.DataFrame) -> (pl.DataFrame, list):

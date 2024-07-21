@@ -3,7 +3,7 @@ from pathlib import Path
 
 from utils.commons.file_convert_util import convert_to_parquet
 from utils.commons.polars_comp_util import compare_dataframes, generate_html_report
-from utils.commons.polars_sql_util import read_sql_query
+from utils.commons.polars_sql_util import read_sql_query_as_df
 from utils.commons.polars_util import polars_df_parquet, convert_df_to_string
 from utils.framework.path_util import get_project_root_path
 from utils.framework.s3_utils import download_csv_from_s3
@@ -11,7 +11,7 @@ from utils.framework.s3_utils import download_csv_from_s3
 LOGGER = logging.getLogger(__name__)
 
 
-def test_manual_data_loading_flow(config_fixture, stg_client_fixture, etl_db_engine_fixture, table_name):
+def test_automate_data_loading_flow(config_fixture, stg_client_fixture, etl_db_engine_fixture, table_name):
 
     # Use during development or troubleshooting to see all configurations loaded by custom_conf
     LOGGER.debug(config_fixture.settings.items())
@@ -47,7 +47,7 @@ def test_manual_data_loading_flow(config_fixture, stg_client_fixture, etl_db_eng
 
     # Query EDWP table in Redshift
     query = f"SELECT * FROM ts_eu_pgm_edwp.{table_name};"
-    df3 = read_sql_query(etl_db_engine_fixture, query)
+    df3 = read_sql_query_as_df(etl_db_engine_fixture, query)
 
     LOGGER.info("EDWP Data loading completed")
 

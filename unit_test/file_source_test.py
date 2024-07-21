@@ -26,9 +26,8 @@ class TestLocalSource(unittest.TestCase):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content)
 
-    @patch('builtins.open', new_callable=mock_open, read_data='key = "value"')
-    @patch('custom_conf.config_sources.file_source.toml.load', return_value={'key': 'value'})
-    def test_load(self, mock_toml_load, mock_open):
+    @patch('utils.commons.file_util.load_toml_file', return_value={'key': 'value'})
+    def test_load(self, mock_load_toml_file):
         source = LocalSource(self.file_path)
         result = source.load()
         self.assertEqual(result, {'key': 'value'})
