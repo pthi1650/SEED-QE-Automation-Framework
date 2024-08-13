@@ -7,5 +7,5 @@
 # Ignore temporary files
 *.tmp
 
-# Ignore all hidden files (if needed?)
+# Ignore all hidden files (optionally)
 .*
