@@ -1,0 +1,103 @@
+metadata:
+  aurora_db:
+    table_name: "tracking_table"
+
+source:
+  sftp:
+    source_folder_path: "GB/DirectUpload/GB_BS_Customer_Specific_PGM_Output/"
+    source_file_type: "csv"
+    filters:
+      drop_columns: ["urn_nbr"]
+    standardize:
+      remove_na_pattern: ["NA", "N/A"]
+
+stage:
+  aws_s3:
+    stg_s3_bucket: "sysco-seed-eu-np-external-inbound"
+    stg_s3_path: "PGM/GB/DirectUpload/GB_BS_Lots_and_lights_redux/"
+    stage_compression: "gzip"
+    stage_encryption: "AES256"
+    data_format: "csv"
+    delimiter: "|"
+    external_table_columns: |
+      catgy_hier1_nm VARCHAR(60),
+      catgy_hier2_nm VARCHAR(60),
+      catgy_hier3_nm VARCHAR(40),
+      sku_cd VARCHAR(100),
+      sku_nm VARCHAR(150),
+      lot_nm VARCHAR(150),
+      pck_sz_cd VARCHAR(60),
+      wgt_qty NUMERIC(30, 20), 
+      wgt_unit_cd VARCHAR(30),
+      list_prc_ext_amt NUMERIC(20, 15), 
+      list_prc_or_wgt_amt NUMERIC(25, 21), 
+      liv_trff_lght_desc VARCHAR(60)
+
+    column_map: ["urn_nbr", "urn_nm", "os_cd", "os_nm", "os_pck_sz_desc", "os_sale_prc_amt", "as_cd", "as_nm", "as_pck_sz_desc", "as_sell_price_amt", "wk_qty", "wk_sale_bfr_swap_amt", "wk_mrgn_bfr_swap_amt", "wk_cust_bnft_amt", "wk_sysco_bnft_amt", "fnl_rnk_nbr", "allergen_mtch_ind_cd", "awrd_win_prod_ind_cd", "dir_sbst_ind_cd", "os_trff_lght_desc", "as_trff_lght_desc", "as_eq_vol_pr_wk_qty", "os_tmp_desc", "as_tmp_desc", "mrgn_ptntl_annualised_amt", "sale_rep_fs_desc", "sale_mgr_fs_desc", "sugg_dscnt_desc"]
+
+warehouse:
+  redshift:
+    lndp:
+      table_name: "lndp_table"
+      schema_name: "lndp_schema"
+      load_strategy: "turncate_load"
+      data_validation_checks: ["check_nulls"]
+      data_quality_checks: ["Data Consistency", "check_freshness", "check_duplicates"]
+    intp:
+      table_name: "intp_table"
+      schema_name: "intp_schema"
+      load_strategy: "incremental"
+      data_quality_checks: ["check_nulls", "check_duplicates"]
+      transformation_checks: ["RI_processing", "SCD_logic", "custom_business_requirements"]
+    edwp:
+      table_name: "edwp_table"
+      schema_name: "edwp_schema"
+      load_strategy: "turncate_load"
+      data_validation_checks: ["check_nulls", "check_precision"]
+      data_quality_checks: ["Data Consistency", "check_freshness", "check_duplicates"]
+      precision_columns: ["price"]
+
+orchestration:
+  airflow:
+    dag_id: "gb_bs_lots_and_lights_redux_dag"
+    schedule_interval: "0 0 1 * * *"
+    default_args:
+      owner: "sysco-seed-eu-np-external"
+
+test_scope:
+  metadata:
+    enabled: true
+    checks:
+      validation: true
+      data_quality: true
+
+  source:
+    enabled: true
+    checks:
+      validation: true
+      data_quality: true
+  stage:
+    enabled: true
+    checks:
+      validation: true
+      data_quality: true
+  lndp:
+    enabled: true
+    checks:
+      validation: true
+      data_quality: true
+  edwp:
+    enabled: true
+    checks:
+      validation: true
+      data_quality: true
+      transformation: true
+  orchestration:
+    enabled: true
+    checks:
+      job_run_check: true
+
+test_info:
+  table_identifier: "out_trff_lght_mstr_rdx_gb_fact"
+  data_processing_mode: "warehouse"
+  data_processing_core: "redshift"
