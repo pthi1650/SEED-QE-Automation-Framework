@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'data_checks/**'  # Only trigger when files under data_checks/ are changed
 
 jobs:
   upload:
-    runs-on: ubuntu-latest  # or a lighter version like ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -19,8 +21,8 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: eu-west-1
+          aws-region: us-east-1
 
       - name: Upload YAML files to S3
         run: |
-          aws s3 sync data_checks/ s3://sysco-seed-eu-np-external-inbound/data_checks/ --exact-timestamps --delete
+          aws s3 sync data_checks/ s3://sysco-seed-eu-np-external-inbound/data_checks/ --exact-timestamps --delete --exclude "*.gitkeep" --exclude "*.log"
