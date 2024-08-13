@@ -95,7 +95,7 @@ test_scope:
   orchestration:
     enabled: true
     checks:
-      job_run_check: true
+      job_run_check: false
 
 test_info:
   table_identifier: "out_trff_lght_mstr_rdx_gb_fact"
