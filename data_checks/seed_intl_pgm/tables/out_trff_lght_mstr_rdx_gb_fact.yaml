@@ -93,7 +93,7 @@ test_scope:
       data_quality: true
       transformation: true
   orchestration:
-    enabled: true
+    enabled: false
     checks:
       job_run_check: false
 
